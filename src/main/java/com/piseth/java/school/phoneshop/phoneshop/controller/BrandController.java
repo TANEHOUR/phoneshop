@@ -24,5 +24,17 @@ public class BrandController {
 //        return ResponseEntity.ok(brand);
         return ResponseEntity.ok(Mapper.toBrandDTO(brand));
     }
+    @GetMapping("{id}")
+    public ResponseEntity<?> getOneBrand(@PathVariable("id") Integer brandId){    //@PathVariable if we write this will error integer is not present
+        Brand brand = brandService.getById(brandId);
+        return ResponseEntity.ok(Mapper.toBrandDTO(brand));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Integer brandId, @RequestBody BrandDTO brandDTO){
+        Brand brand = Mapper.toBrand(brandDTO);
+        Brand updateBrand = brandService.update(brandId, brand);
+        return ResponseEntity.ok(Mapper.toBrandDTO(updateBrand));
+    }
 
 }
