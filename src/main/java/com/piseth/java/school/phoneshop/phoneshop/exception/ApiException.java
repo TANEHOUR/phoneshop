@@ -8,6 +8,6 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 
 public class ApiException extends RuntimeException{
-    private final HttpStatus status;
-    private final String message;
+    private final HttpStatus status;    // Error status/code
+    private final String message;       // show error message from status/code
 }

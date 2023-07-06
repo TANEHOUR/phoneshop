@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Data
 @AllArgsConstructor
 
-public class ErrorResponse {
+public class ErrorResponse { // customize Error on postman
     private HttpStatus status;
     private String message;
 }
