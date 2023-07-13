@@ -7,6 +7,7 @@ import com.piseth.java.school.phoneshop.phoneshop.service.BrandService;
 import com.piseth.java.school.phoneshop.phoneshop.service.util.PageUtil;
 import com.piseth.java.school.phoneshop.phoneshop.spacification.BrandFilter;
 import com.piseth.java.school.phoneshop.phoneshop.spacification.BrandSpeci;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,11 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 @Service    // can use component but not recommend
+@RequiredArgsConstructor
 
 public class BrandServiceImpl implements BrandService {
 
     @Autowired  // it'll create obj for us
-    private BrandRepository brandRepository;    // call method to save data
+    private final BrandRepository brandRepository;    // call method to save data
 
     @Override
     public Brand create(Brand brand) {
@@ -31,7 +33,8 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public Brand getById(Integer id) {
-        return brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Brand", id));
+        return brandRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Brand", id));
 /*                () -> new ApiException(HttpStatus.NOT_FOUND, String.format("Brand with id = %d not found.", id))); // java version 6, 7
         orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Brand with id = %d not found.".formatted(id))); // java version 8*/
     }
