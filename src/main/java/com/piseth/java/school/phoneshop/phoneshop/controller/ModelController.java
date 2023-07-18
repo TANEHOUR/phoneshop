@@ -2,7 +2,7 @@ package com.piseth.java.school.phoneshop.phoneshop.controller;
 
 import com.piseth.java.school.phoneshop.phoneshop.dto.ModelDTO;
 import com.piseth.java.school.phoneshop.phoneshop.entities.Model;
-import com.piseth.java.school.phoneshop.phoneshop.mapper.ModelMapper;
+import com.piseth.java.school.phoneshop.phoneshop.mapper.ModelEntityMapper;
 import com.piseth.java.school.phoneshop.phoneshop.service.ModelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("models")
+@RequestMapping("/models")
 public class ModelController {
 
     //    @Autowired
     private final ModelService modelService;
-    private final ModelMapper modelMapper;
+    private final ModelEntityMapper modelEntityMapper;
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ModelDTO modelDTO) {
-        Model model = modelMapper.toModel(modelDTO);
+        Model model = modelEntityMapper.toModel(modelDTO);
         model = modelService.save(model);
-        return ResponseEntity.ok(modelMapper.toModelDTO(model));
+        return ResponseEntity.ok(modelEntityMapper.toModelDTO(model));
     }
+
+
 }

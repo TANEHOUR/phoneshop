@@ -1,4 +1,4 @@
-package com.piseth.java.school.phoneshop.phoneshop;
+package com.piseth.java.school.phoneshop.phoneshop.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

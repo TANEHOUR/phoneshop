@@ -2,10 +2,15 @@ package com.piseth.java.school.phoneshop.phoneshop.controller;
 
 
 import com.piseth.java.school.phoneshop.phoneshop.dto.BrandDTO;
+import com.piseth.java.school.phoneshop.phoneshop.dto.ModelDTO;
 import com.piseth.java.school.phoneshop.phoneshop.dto.PageDTO;
 import com.piseth.java.school.phoneshop.phoneshop.entities.Brand;
+import com.piseth.java.school.phoneshop.phoneshop.entities.Model;
 import com.piseth.java.school.phoneshop.phoneshop.mapper.BrandMapper;
+import com.piseth.java.school.phoneshop.phoneshop.mapper.ModelEntityMapper;
 import com.piseth.java.school.phoneshop.phoneshop.service.BrandService;
+import com.piseth.java.school.phoneshop.phoneshop.service.ModelService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +20,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController // implicit @ResponseBody
 @RequestMapping("brands")   // mean we need to handle view which one we need to show
 
 public class BrandController {
 
     @Autowired
-    private BrandService brandService;
+    private final BrandService brandService;
+    private final ModelService modelService;
+    private final ModelEntityMapper modelEntityMapper;
 
     // Create / POST method
     @RequestMapping(method = RequestMethod.POST)    // use POST method in postman this method will run
@@ -72,6 +80,13 @@ public class BrandController {
         Brand updateBrand = brandService.update(brandId, brand);
         return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updateBrand));
     }
-
+    @GetMapping("{id}/models")
+    public ResponseEntity<?> getModelByBrand(@PathVariable("id") Integer brandId) {
+        List<Model> brands = modelService.getByBrand(brandId);
+        List<ModelDTO> list = brands.stream()
+                .map(modelEntityMapper::toModelDTO)
+                .toList();
+        return ResponseEntity.ok(list);
+    }
 
 }
