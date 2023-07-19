@@ -12,6 +12,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true  # not generate db schema
 
 # Testing H2
 #spring:
