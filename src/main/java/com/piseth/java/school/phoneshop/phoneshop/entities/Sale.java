@@ -3,18 +3,20 @@ package com.piseth.java.school.phoneshop.phoneshop.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "models")
-public class Model {
+@Table(name = "sales")
+
+public class Sale {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "sale_id")
     private Long id;
 
-    private String name;
+    @Column(name = "sold_date")
+    private LocalDateTime soldDate;
 
-    @ManyToOne()
-    @JoinColumn(name = "brand_id")  // using Column will error
-    private Brand brand;
 }

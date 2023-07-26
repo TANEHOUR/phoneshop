@@ -32,7 +32,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Brand getById(Integer id) {
+    public Brand getById(Long id) {
         return brandRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Brand", id));
 /*                () -> new ApiException(HttpStatus.NOT_FOUND, String.format("Brand with id = %d not found.", id))); // java version 6, 7
@@ -40,7 +40,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Brand update(Integer id, Brand brandUpdate) {
+    public Brand update(Long id, Brand brandUpdate) {
         Brand brand = getById(id);
         brand.setName(brandUpdate.getName());
         return brandRepository.save(brand); // if already have id it'll update
@@ -78,7 +78,7 @@ public class BrandServiceImpl implements BrandService {
         }
         if (params.containsKey("id")) {
             String id = params.get("id");
-            brandFilter.setId(Integer.valueOf(id));
+            brandFilter.setId(Long.valueOf(id));
         }
         int pageLimit = PageUtil.DEFAULT_PAGE_LIMIT;
         if (params.containsKey(PageUtil.PAGE_LIMIT)) {

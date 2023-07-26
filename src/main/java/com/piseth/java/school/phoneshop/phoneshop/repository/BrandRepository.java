@@ -12,7 +12,7 @@ import java.util.List;
 
 /* Brand is our class brand that we create,
  Integer is Id of brand*/
-public interface BrandRepository extends JpaRepository<Brand, Integer>, JpaSpecificationExecutor<Brand> {
+public interface BrandRepository extends JpaRepository<Brand, Long>, JpaSpecificationExecutor<Brand> {
 
     //    List<Brand> findByNameIgnoreCase(String name);
     List<Brand> findByNameLike(String name); // jpa query method

@@ -6,15 +6,15 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "models")
-public class Model {
+@Table(name = "colors")
+
+public class Color {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "color_id")
     private Long id;
-
+    @Column(name = "color_name")
     private String name;
 
-    @ManyToOne()
-    @JoinColumn(name = "brand_id")  // using Column will error
-    private Brand brand;
 }

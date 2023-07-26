@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ModelRepository extends JpaRepository<Model, Integer> {
+public interface ModelRepository extends JpaRepository<Model, Long> {
 
-    List<Model> findByBrandId(Integer brandId);
+    List<Model> findByBrandId(Long brandId);
 }

@@ -1,53 +1,42 @@
 package com.piseth.java.school.phoneshop.phoneshop.controller;
 
 
-import com.piseth.java.school.phoneshop.phoneshop.dto.BrandDTO;
-import com.piseth.java.school.phoneshop.phoneshop.dto.ModelDTO;
-import com.piseth.java.school.phoneshop.phoneshop.dto.PageDTO;
-import com.piseth.java.school.phoneshop.phoneshop.entities.Brand;
-import com.piseth.java.school.phoneshop.phoneshop.entities.Model;
-import com.piseth.java.school.phoneshop.phoneshop.mapper.BrandMapper;
-import com.piseth.java.school.phoneshop.phoneshop.mapper.ModelEntityMapper;
-import com.piseth.java.school.phoneshop.phoneshop.service.BrandService;
-import com.piseth.java.school.phoneshop.phoneshop.service.ModelService;
+import com.piseth.java.school.phoneshop.phoneshop.dto.ProductDTO;
+import com.piseth.java.school.phoneshop.phoneshop.entities.Product;
+import com.piseth.java.school.phoneshop.phoneshop.mapper.ProductMapper;
+import com.piseth.java.school.phoneshop.phoneshop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController // implicit @ResponseBody
-@RequestMapping("brands")   // mean we need to handle view which one we need to show
+@RestController
+@RequestMapping("products")
 
-public class BrandController {
+public class ProductController {
 
     @Autowired
-    private final BrandService brandService;
-    private final ModelService modelService;
-    private final ModelEntityMapper modelEntityMapper;
+    private final ProductService productService;
+    private final ProductMapper productMapper;
 
-    // Create / POST method
-    @RequestMapping(method = RequestMethod.POST)    // use POST method in postman this method will run
-    public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) { // @RequestBody mean request brandDTO body to show data for viewer
-//        Brand brand = Mapper.toBrand(brandDTO);
-        Brand brand = BrandMapper.INSTANCE.toBrand(brandDTO);
-        brand = brandService.create(brand);
-//        return ResponseEntity.ok(brand);
-        return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brand));
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> create(@RequestBody ProductDTO productDTO) {
+        Product product = productMapper.toProduct(productDTO);
+        product = productService.create(product);
+        return ResponseEntity.ok(product);
     }
 
-    @GetMapping("{id}") // Read / GET method
+    /*@GetMapping("{id}") // Read / GET method
     public ResponseEntity<?> getOneBrand(@PathVariable("id") Long brandId) {    //@PathVariable if we write this will error integer is not present
         Brand brand = brandService.getById(brandId);                              //@PathVariable("id") the same as GetMapping it'll work
         return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brand));
     }
 
-    /*    @GetMapping()
+    *//*    @GetMapping()
         public ResponseEntity<?> getBrand(){
             List<BrandDTO> list = brandService.getBrands()
                     .stream()
@@ -62,15 +51,15 @@ public class BrandController {
                     .map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
                     .collect(Collectors.toList());
             return ResponseEntity.ok(list);
-        }*/
+        }*//*
     @GetMapping
     public ResponseEntity<?> getBrand(@RequestParam Map<String, String> params) {
         Page<Brand> page = brandService.getBrands(params);
         PageDTO pageDTO = new PageDTO(page);
-/*        List<BrandDTO> list = brandService.getBrands(params)
+*//*        List<BrandDTO> list = brandService.getBrands(params)
                 .stream()
                 .map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
-                .collect(Collectors.toList());*/
+                .collect(Collectors.toList());*//*
         return ResponseEntity.ok(pageDTO);
     }
 
@@ -87,6 +76,6 @@ public class BrandController {
                 .map(modelEntityMapper::toModelDTO)
                 .toList();
         return ResponseEntity.ok(list);
-    }
+    }*/
 
 }
