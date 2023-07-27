@@ -2,16 +2,14 @@ package com.piseth.java.school.phoneshop.phoneshop.controller;
 
 
 import com.piseth.java.school.phoneshop.phoneshop.dto.ProductDTO;
+import com.piseth.java.school.phoneshop.phoneshop.dto.ProductImportDTO;
 import com.piseth.java.school.phoneshop.phoneshop.entities.Product;
 import com.piseth.java.school.phoneshop.phoneshop.mapper.ProductMapper;
 import com.piseth.java.school.phoneshop.phoneshop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,13 +28,21 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    /*@GetMapping("{id}") // Read / GET method
+    @PostMapping("importProduct")
+    public ResponseEntity<?> importProduct(@RequestBody ProductImportDTO productImportDTO){
+        productService.importProduct(productImportDTO);
+        return ResponseEntity.ok().build();
+    }
+
+/*
+
+    @GetMapping("{id}") // Read / GET method
     public ResponseEntity<?> getOneBrand(@PathVariable("id") Long brandId) {    //@PathVariable if we write this will error integer is not present
         Brand brand = brandService.getById(brandId);                              //@PathVariable("id") the same as GetMapping it'll work
         return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brand));
     }
 
-    *//*    @GetMapping()
+        @GetMapping()
         public ResponseEntity<?> getBrand(){
             List<BrandDTO> list = brandService.getBrands()
                     .stream()
@@ -51,15 +57,15 @@ public class ProductController {
                     .map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
                     .collect(Collectors.toList());
             return ResponseEntity.ok(list);
-        }*//*
+        }
     @GetMapping
     public ResponseEntity<?> getBrand(@RequestParam Map<String, String> params) {
         Page<Brand> page = brandService.getBrands(params);
         PageDTO pageDTO = new PageDTO(page);
-*//*        List<BrandDTO> list = brandService.getBrands(params)
+        List<BrandDTO> list = brandService.getBrands(params)
                 .stream()
                 .map(brand -> BrandMapper.INSTANCE.toBrandDTO(brand))
-                .collect(Collectors.toList());*//*
+                .collect(Collectors.toList());
         return ResponseEntity.ok(pageDTO);
     }
 
@@ -76,6 +82,7 @@ public class ProductController {
                 .map(modelEntityMapper::toModelDTO)
                 .toList();
         return ResponseEntity.ok(list);
-    }*/
+    }
+*/
 
 }

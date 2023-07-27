@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -18,7 +18,7 @@ public class ProductImportHistory {
     private Long id;
 
     @Column(name = "date_import")
-    private LocalDateTime dateImport;
+    private LocalDate dateImport;
 
     @JoinColumn(name = "import_unit")
     private Integer importUnit;
