@@ -3,15 +3,15 @@ package com.piseth.java.school.phoneshop.phoneshop.service.impl;
 import com.piseth.java.school.phoneshop.phoneshop.dto.ProductImportDTO;
 import com.piseth.java.school.phoneshop.phoneshop.entities.Product;
 import com.piseth.java.school.phoneshop.phoneshop.entities.ProductImportHistory;
-import com.piseth.java.school.phoneshop.phoneshop.exception.ApiException;
 import com.piseth.java.school.phoneshop.phoneshop.exception.ResourceNotFoundException;
 import com.piseth.java.school.phoneshop.phoneshop.mapper.ProductMapper;
 import com.piseth.java.school.phoneshop.phoneshop.repository.ProductImportHistoryRepository;
 import com.piseth.java.school.phoneshop.phoneshop.repository.ProductRepository;
 import com.piseth.java.school.phoneshop.phoneshop.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @RequiredArgsConstructor
 @Service
@@ -53,6 +53,18 @@ public class ProductServiceImpl implements ProductService {
         //save product import history
         ProductImportHistory productImportHistory = productMapper.toProductImportHistory(productImportDTO, product);
         productImportHistoryRepository.save(productImportHistory);
+
+    }
+
+    @Override
+    public void setSalePrice(Long productId, BigDecimal price) {
+        Product product = getById(productId);
+        product.setSalePrice(price);
+        productRepository.save(product);
+    }
+
+    @Override
+    public void validateStock(Long productId, Integer numberOfUnit) {
 
     }
 }

@@ -21,7 +21,7 @@ public class SaleDetail {
     @JoinColumn(name = "sale_id")
     private Sale sale;
 
-    @Column(name = "sold_date")
+    @Column(name = "sold_amount")
     private BigDecimal amount;
 
     @ManyToOne
