@@ -11,9 +11,12 @@ import java.util.Map;
 public interface BrandService {
 
     Brand create(Brand brand);
+
     Brand getById(Long id);
+
     Brand update(Long id, Brand brandUpdate);
-//    List<Brand> getBrands();
+
+    //    List<Brand> getBrands();
     List<Brand> getBrands(String name);
 //    List<Brand> getBrands(Map<String, String> params);
 
