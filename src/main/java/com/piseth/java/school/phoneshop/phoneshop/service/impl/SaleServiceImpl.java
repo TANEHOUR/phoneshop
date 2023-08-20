@@ -6,6 +6,7 @@ import com.piseth.java.school.phoneshop.phoneshop.entities.Product;
 import com.piseth.java.school.phoneshop.phoneshop.entities.Sale;
 import com.piseth.java.school.phoneshop.phoneshop.entities.SaleDetail;
 import com.piseth.java.school.phoneshop.phoneshop.exception.ApiException;
+import com.piseth.java.school.phoneshop.phoneshop.exception.ResourceNotFoundException;
 import com.piseth.java.school.phoneshop.phoneshop.repository.ProductRepository;
 import com.piseth.java.school.phoneshop.phoneshop.repository.SaleDetailRepository;
 import com.piseth.java.school.phoneshop.phoneshop.repository.SaleRepository;
@@ -74,6 +75,32 @@ public class SaleServiceImpl implements SaleService {
 
             Integer availableUnit = product.getAvailableUnit() - ps.getNumberOfUnit();
             product.setAvailableUnit(availableUnit);
+            productRepository.save(product);
+        });
+    }
+
+    @Override
+    public Sale getById(Long saleId) {
+        return saleRepository.findById(saleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Sale", saleId));
+    }
+
+    @Override
+    public void cancelSale(Long saleId) {
+        Sale sale = getById(saleId);
+        sale.setActive(false);
+        saleRepository.save(sale);
+        List<SaleDetail> saleDetails = saleDetailRepository.findBySaleId(saleId);
+        List<Long> productId = saleDetails.stream()
+                .map(saleDetail -> saleDetail.getProduct().getId())
+                .toList();
+
+        List<Product> products = productRepository.findAllById(productId);
+        Map<Long, Product> productMap = products.stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+        saleDetails.forEach(saleDetail -> {
+            Product product = productMap.get(saleDetail.getProduct().getId());
+            product.setAvailableUnit(product.getAvailableUnit() + saleDetail.getUnit());
             productRepository.save(product);
         });
     }
