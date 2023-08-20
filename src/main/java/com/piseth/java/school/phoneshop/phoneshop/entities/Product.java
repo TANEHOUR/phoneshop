@@ -1,5 +1,6 @@
 package com.piseth.java.school.phoneshop.phoneshop.entities;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
+@Builder
 @Table(name = "products"
         , uniqueConstraints = {@UniqueConstraint(columnNames = {"model_id", "color_id"})})
 

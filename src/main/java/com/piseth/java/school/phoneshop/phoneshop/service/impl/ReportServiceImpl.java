@@ -1,13 +1,18 @@
 package com.piseth.java.school.phoneshop.phoneshop.service.impl;
 
 import com.piseth.java.school.phoneshop.phoneshop.dto.ProductReportDTO;
+import com.piseth.java.school.phoneshop.phoneshop.dto.report.ExpenseReportDTO;
 import com.piseth.java.school.phoneshop.phoneshop.entities.Product;
+import com.piseth.java.school.phoneshop.phoneshop.entities.ProductImportHistory;
 import com.piseth.java.school.phoneshop.phoneshop.entities.SaleDetail;
 import com.piseth.java.school.phoneshop.phoneshop.projection.ProductSold;
+import com.piseth.java.school.phoneshop.phoneshop.repository.ProductImportHistoryRepository;
 import com.piseth.java.school.phoneshop.phoneshop.repository.ProductRepository;
 import com.piseth.java.school.phoneshop.phoneshop.repository.SaleDetailRepository;
 import com.piseth.java.school.phoneshop.phoneshop.repository.SaleRepository;
 import com.piseth.java.school.phoneshop.phoneshop.service.ReportService;
+import com.piseth.java.school.phoneshop.phoneshop.spacification.ProductImportHistoryFilter;
+import com.piseth.java.school.phoneshop.phoneshop.spacification.ProductImportHistorySpeci;
 import com.piseth.java.school.phoneshop.phoneshop.spacification.SaleDetailFilter;
 import com.piseth.java.school.phoneshop.phoneshop.spacification.SaleDetailSpeci;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,6 +31,7 @@ public class ReportServiceImpl implements ReportService {
     private final SaleRepository saleRepository;
     private final SaleDetailRepository saleDetailRepository;
     private final ProductRepository productRepository;
+    private final ProductImportHistoryRepository productImportHistoryRepository;
 
     @Override
     public List<ProductSold> getProductSold(LocalDate startDate, LocalDate endDate) {
@@ -71,5 +75,53 @@ public class ReportServiceImpl implements ReportService {
         }
         return list;
 
+    }
+
+    @Override
+    public List<ExpenseReportDTO> getExpenseReportDTO(LocalDate startDate, LocalDate endDate) {
+
+        ProductImportHistoryFilter productImportHistoryFilter = new ProductImportHistoryFilter();
+        productImportHistoryFilter.setStartDate(startDate);
+        productImportHistoryFilter.setEndDate(endDate);
+
+        ProductImportHistorySpeci productImportHistorySpeci = new ProductImportHistorySpeci(productImportHistoryFilter);
+        List<ProductImportHistory> importHistories = productImportHistoryRepository.findAll(productImportHistorySpeci);
+
+        Set<Long> productIds = importHistories.stream()
+                .map(productImportHistory -> productImportHistory.getProduct().getId())
+                .collect(Collectors.toSet());
+
+        List<Product> products = productRepository.findAllById(productIds);
+        Map<Long, Product> productMap = products.stream().collect(Collectors.toMap(product -> product.getId(), product -> product));
+
+
+        Map<Product, List<ProductImportHistory>> importMap = importHistories.stream()
+                .collect(Collectors.groupingBy(productImportHistory -> productImportHistory.getProduct()));
+        List<ExpenseReportDTO> expenseReportDTOs = new ArrayList<>();
+//        var expenseReportDTOs = new ArrayList<ExpenseReportDTO>();
+
+        for (var entry : importMap.entrySet()) {
+            Product product = productMap.get(entry.getKey().getId());
+            List<ProductImportHistory> importProducts = entry.getValue();
+
+            int totalUnit = importProducts.stream()
+                    .mapToInt(pi -> pi.getImportUnit())
+                    .sum();
+
+            double totalAmount = importProducts.stream()
+                    .mapToDouble(pi -> pi.getImportUnit() * pi.getPricePerUnit().doubleValue())
+                    .sum();
+
+
+            var expenseReportDTO = new ExpenseReportDTO();
+            expenseReportDTO.setProductId(product.getId());
+            expenseReportDTO.setProductName(product.getName());
+            expenseReportDTO.setTotalUnit(totalUnit);
+            expenseReportDTO.setTotalAmount(BigDecimal.valueOf(totalAmount));
+            expenseReportDTOs.add(expenseReportDTO);
+        }
+        Collections.sort(expenseReportDTOs, (a, b) -> (int) (a.getProductId() - b.getProductId()));
+
+        return expenseReportDTOs;
     }
 }
