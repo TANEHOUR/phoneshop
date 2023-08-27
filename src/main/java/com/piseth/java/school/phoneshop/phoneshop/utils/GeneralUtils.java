@@ -1,6 +1,7 @@
 package com.piseth.java.school.phoneshop.phoneshop.utils;
 
 import java.util.List;
+
 public class GeneralUtils {
 
     public static List<Integer> toInteger(List<String> list) {

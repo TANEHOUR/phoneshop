@@ -46,6 +46,6 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .setIssuer("phoneshop.com")
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .compact();
-        response.setHeader("Autoriztion","Bearer" + token);
+        response.setHeader("Autoriztion","Bearer " + token);
     }
 }
