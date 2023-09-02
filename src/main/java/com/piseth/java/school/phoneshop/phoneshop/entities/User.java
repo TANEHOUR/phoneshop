@@ -1,9 +1,9 @@
 package com.piseth.java.school.phoneshop.phoneshop.entities;
 
-import com.piseth.java.school.phoneshop.phoneshop.config.security.RoleEnum;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -17,10 +17,10 @@ public class User {
     private String username;
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private RoleEnum role;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
 }

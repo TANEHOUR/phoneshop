@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity // from jpa
 @Table(name = "brands") // convention with (s) customize table
 
-public class Brand {
+public class Brand extends AuditEntity {
     @Id // Error no identifier if we don't use id annotation
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto generate id for us
     @Column(name = "brand_id")  // customize column
